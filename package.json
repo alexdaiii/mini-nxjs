@@ -1,0 +1,51 @@
+{
+  "name": "@alexdaiii/mini-nxjs-cls",
+  "version": "0.1.0",
+  "description": "Class based networks (graph theory) library that mimics some of the basic methods from networkx",
+  "scripts": {
+    "test": "NODE_OPTIONS=--experimental-vm-modules jest --coverage",
+    "format": "prettier --write ./**/*.{ts,js,json,md}",
+    "lint": "eslint ./src --ext .ts --ext .js --config ./.eslintrc.cjs",
+    "clean": "rm -rf ./lib && rm -rf ./coverage",
+    "build": "npm run format && npm run clean && npm run test && tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/alexdaiii/mini-nxjs-cls.git"
+  },
+  "keywords": [
+    "graph",
+    "graph-theory",
+    "network",
+    "node",
+    "edge",
+    "vertex",
+    "link"
+  ],
+  "author": "Alex Chang",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/alexdaiii/mini-nxjs-cls/issues"
+  },
+  "homepage": "https://github.com/alexdaiii/mini-nxjs-cls#readme",
+  "dependencies": {
+    "@trivago/prettier-plugin-sort-imports": "^4.2.1",
+    "immutable": "^4.3.4",
+    "jest": "^29.7.0",
+    "prettier": "^3.0.3",
+    "yocto-queue": "^1.0.0"
+  },
+  "devDependencies": {
+    "@jest/globals": "^29.7.0",
+    "@typescript-eslint/eslint-plugin": "^6.9.0",
+    "@typescript-eslint/parser": "^6.9.0",
+    "eslint": "^8.52.0",
+    "eslint-config-google": "^0.14.0",
+    "ts-jest": "^29.1.1",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.2.2"
+  },
+  "files": [
+    "lib/**/*"
+  ]
+}
