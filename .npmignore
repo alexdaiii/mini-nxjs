@@ -1,7 +1,6 @@
-### Node template
-lib
-dist
+src
 
+### Node template
 # Logs
 logs
 *.log
