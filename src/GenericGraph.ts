@@ -47,8 +47,10 @@ import {Tuple} from "@/utils";
  *   }
  * }
  * ```
+ *
+ * @template V the type of the vertices in the graph.
  */
-export abstract class GenericGraph<V = never, E = never> {
+export abstract class GenericGraph<V = unknown, E = unknown> {
   protected readonly _adj: Map<V, E>;
 
   /**
@@ -97,9 +99,9 @@ export abstract class GenericGraph<V = never, E = never> {
 
   /**
    * Adds a vertex to the graph.
-   * @param v the vertex to add.
+   * @param _v
    */
-  abstract addVertex(v: V): void;
+  abstract addVertex(_v: V): void;
 
   /**
    * Removes a vertex from the graph.
@@ -117,17 +119,17 @@ export abstract class GenericGraph<V = never, E = never> {
 
   /**
    * Creates a new edge (v, w) in the graph.
-   * @param {V} v the source vertex.
-   * @param {V} w the destination vertex.
+   * @param {V} _v the source vertex.
+   * @param {V} _w the destination vertex.
    */
-  abstract addEdge(v: V, w: V): void;
+  abstract addEdge(_v: V, _w: V): void;
 
   /**
    * Removes the edge (v, w) from the graph.
-   * @param {V} v the source vertex.
-   * @param {V} w the destination vertex.
+   * @param {V} _v the source vertex.
+   * @param {V} _w the destination vertex.
    */
-  abstract removeEdge(v: V, w: V): void;
+  abstract removeEdge(_v: V, _w: V): void;
 
   /**
    * Adds all the edges in the edge list to the graph.
@@ -154,10 +156,10 @@ export abstract class GenericGraph<V = never, E = never> {
 
   /**
    * Determines if there is a (v, w) edge in the graph.
-   * @param {V} v the source vertex.
-   * @param {V} w the destination vertex.
+   * @param {V} _v the source vertex.
+   * @param {V} _w the destination vertex.
    */
-  abstract hasEdge(v: V, w: V): boolean;
+  abstract hasEdge(_v: V, _w: V): boolean;
 
   /**
    * Determines if the graph contains the vertex v.
@@ -178,24 +180,24 @@ export abstract class GenericGraph<V = never, E = never> {
 
   /**
    * Returns the number of edges in the graph.
-   * @param {V} v the vertex to check.
+   * @param {V} _v the vertex to check.
    * @return {number} the number of edges in the graph.
    */
-  abstract neighbors(v: V): V[];
+  abstract neighbors(_v: V): V[];
 
   /**
    * Returns the number of edges incident to v.
-   * @param {V} v the vertex to check.
+   * @param {V} _v the vertex to check.
    * @return {number} the number of edges incident to v.
    */
-  abstract inDegree(v: V): number;
+  abstract inDegree(_v: V): number;
 
   /**
    * Returns the number of edges that leave v.
-   * @param {V} v the vertex to check.
+   * @param {V} _v the vertex to check.
    * @return {number} the number of edges that leave v.
    */
-  abstract outDegree(v: V): number;
+  abstract outDegree(_v: V): number;
 
   /**
    * Generator that yields the edges in the graph from a DFS starting at v.

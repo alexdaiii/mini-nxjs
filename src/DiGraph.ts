@@ -10,7 +10,7 @@ import {
 /**
  * An unweighted directed graph that does not allow parallel edges
  */
-export class DiGraph<V = never> extends GenericGraph<
+export class DiGraph<V = unknown> extends GenericGraph<
   V,
   {
     inVtx: Set<V>;
@@ -24,12 +24,16 @@ export class DiGraph<V = never> extends GenericGraph<
     super();
   }
 
-  // eslint-disable-next-line require-jsdoc
+  /**
+   * @inheritDoc
+   */
   isDirected(): boolean {
     return true;
   }
 
-  // eslint-disable-next-line require-jsdoc
+  /**
+   * @inheritDoc
+   */
   edges(): [V, V][] {
     const edges: [V, V][] = [];
     for (const [v, {outVtx}] of this._adj) {
@@ -40,14 +44,18 @@ export class DiGraph<V = never> extends GenericGraph<
     return edges;
   }
 
-  // eslint-disable-next-line require-jsdoc
+  /**
+   * @inheritDoc
+   */
   addVertex(v: V): void {
     if (!this._adj.has(v)) {
       this._adj.set(v, {inVtx: new Set(), outVtx: new Set()});
     }
   }
 
-  // eslint-disable-next-line require-jsdoc
+  /**
+   * @inheritDoc
+   */
   addEdge(v: V, w: V): void {
     if (!this._adj.has(v)) {
       this._adj.set(v, {inVtx: new Set(), outVtx: new Set()});
@@ -62,7 +70,9 @@ export class DiGraph<V = never> extends GenericGraph<
     this._adj.get(w)!.inVtx.add(v);
   }
 
-  // eslint-disable-next-line require-jsdoc
+  /**
+   * @inheritDoc
+   */
   removeEdge(v: V, w: V) {
     this.validateEdge(v, w);
 
@@ -70,26 +80,34 @@ export class DiGraph<V = never> extends GenericGraph<
     this._adj.get(w)!.inVtx.delete(v);
   }
 
-  // eslint-disable-next-line require-jsdoc
+  /**
+   * @inheritDoc
+   */
   hasEdge(v: V, w: V): boolean {
     this.validateVertex(v);
     this.validateVertex(w);
     return this._adj.get(v)!.outVtx.has(w) && this._adj.get(w)!.inVtx.has(v);
   }
 
-  // eslint-disable-next-line require-jsdoc
+  /**
+   * @inheritDoc
+   */
   neighbors(v: V): V[] {
     this.validateVertex(v);
     return Array.from(this._adj.get(v)!.outVtx);
   }
 
-  // eslint-disable-next-line require-jsdoc
+  /**
+   * @inheritDoc
+   */
   inDegree(v: V): number {
     this.validateVertex(v);
     return this._adj.get(v)!.inVtx.size;
   }
 
-  // eslint-disable-next-line require-jsdoc
+  /**
+   * @inheritDoc
+   */
   outDegree(v: V): number {
     this.validateVertex(v);
     return this._adj.get(v)!.outVtx.size;
