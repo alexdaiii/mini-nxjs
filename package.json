@@ -1,5 +1,5 @@
 {
-  "name": "@alexdaiii/mini-nxjs-cls",
+  "name": "@alexdaiii/mini-nxjs",
   "version": "0.1.0",
   "description": "Class based networks (graph theory) library that mimics some of the basic methods from networkx",
   "main": "dist/index.js",
@@ -13,11 +13,11 @@
     "compile": "tsc --project tsconfig.build.json",
     "docs": "jsdoc -c ./jsdoc.json",
     "build": "npm run format && npm run lint && npm run clean && npm run test && npm run compile && npm run docs",
-    "dev_link": "cd dist && npm link && cd .. && npm link @alexdaiii/mini-nxjs-cls"
+    "dev_link": "cd dist && npm link && cd .. && npm link @alexdaiii/mini-nxjs"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/alexdaiii/mini-nxjs-cls.git"
+    "url": "https://github.com/alexdaiii/mini-nxjs.git"
   },
   "keywords": [
     "graph",
@@ -31,9 +31,9 @@
   "author": "Alex Chang",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/alexdaiii/mini-nxjs-cls/issues"
+    "url": "https://github.com/alexdaiii/mini-nxjs/issues"
   },
-  "homepage": "https://github.com/alexdaiii/mini-nxjs-cls#readme",
+  "homepage": "https://github.com/alexdaiii/mini-nxjs#readme",
   "dependencies": {
     "@trivago/prettier-plugin-sort-imports": "^4.2.1",
     "immutable": "^4.3.4",
