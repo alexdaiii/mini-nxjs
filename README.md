@@ -14,3 +14,21 @@ npm install @alexdaiii/mini-nxjs-cls
 @alexdaiii/mini-nxjs-cls only implements two types of graphs: `DirectedGraph` and `UndirectedGraph`.
 
 These graphs are unweighted, do not allow self-loops, and do not allow parallel edges.
+
+### Example
+
+```typescript
+import {DiGraph, algorithms} from "@alexdaiii/mini-nxjs-cls";
+
+const graph = new DiGraph<number>();
+graph.addEdge(1, 2);
+graph.addEdge(2, 3);
+
+const path = algorithms.shortestPath(graph, 1, 3);
+```
+
+### Documentation
+
+[Docs](/docs/index.html)
+
+
