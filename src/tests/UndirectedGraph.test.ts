@@ -1,6 +1,5 @@
 import {describe, expect, test} from "@jest/globals";
 
-import {UnfeasibleError} from "@/GraphErrors";
 import {UndirectedGraph} from "@/UndirectedGraph";
 import {Tuple} from "@/utils";
 
@@ -100,118 +99,6 @@ class TestUndirectedGraph extends TestGenericGraph<UndirectedGraph<number>> {
     });
   }
 
-  shortestCycleGraphTest(graph: UndirectedGraph<number>): void {
-    expect(graph.shortestPath(0, 3)).toEqual([0, 1, 2, 3]);
-    expect(graph.shortestPath(0, 4)).toEqual([0, 6, 5, 4]);
-  }
-
-  testBFS(): void {
-    test("disconnected graph undirected", () => {
-      const graph = this.getGraph();
-      graph.fromEdgeList([
-        [0, 1],
-        [2, 3],
-      ]);
-      const x = Array.from(graph.bfsEdges(1));
-      expect(x).toEqual([[1, 0]]);
-    });
-
-    test("test undirected BFS", () => {
-      const graph = this.getGraph();
-      graph.fromEdgeList([
-        [0, 1],
-        [1, 2],
-        [1, 3],
-        [2, 4],
-        [3, 4],
-      ]);
-      const x = Array.from(graph.bfsEdges(0));
-      expect(x).toEqual([
-        [0, 1],
-        [1, 2],
-        [1, 3],
-        [2, 4],
-      ]);
-    });
-  }
-
-  testDFS(): void {
-    test("disconnected graph undirected", () => {
-      const graph = this.getGraph();
-      graph.fromEdgeList([
-        [0, 1],
-        [2, 3],
-      ]);
-      const x = Array.from(graph.dfsEdges(1));
-      expect(x).toEqual([[1, 0]]);
-    });
-
-    test("test undirected DFS", () => {
-      const graph = this.getGraph();
-      graph.fromEdgeList([
-        [0, 1],
-        [1, 2],
-        [1, 3],
-        [2, 4],
-        [3, 0],
-        [0, 4],
-      ]);
-
-      const x = Array.from(graph.dfsEdges(0));
-
-      const possibleDFS = [
-        [
-          [0, 1],
-          [1, 2],
-          [2, 4],
-          [1, 3],
-        ],
-        [
-          [0, 1],
-          [1, 3],
-          [1, 2],
-          [2, 4],
-        ],
-        [
-          [0, 4],
-          [4, 2],
-          [2, 1],
-          [1, 3],
-        ],
-        [
-          [0, 3],
-          [3, 1],
-          [1, 2],
-          [2, 4],
-        ],
-      ];
-
-      expect(possibleDFS).toContainEqual(x);
-    });
-  }
-
-  testEdgeBFS(): void {
-    test("test single source", () => {
-      const graph = this.getGraph();
-      // [(0, 1), (1, 0), (1, 0), (2, 0), (2, 1), (3, 1)]
-      graph.fromEdgeList([
-        [0, 1],
-        [1, 0],
-        [1, 0],
-        [2, 0],
-        [2, 1],
-        [3, 1],
-      ]);
-
-      expect(Array.from(graph.edgeBfs(0))).toEqual([
-        [0, 1],
-        [0, 2],
-        [1, 2],
-        [1, 3],
-      ]);
-    });
-  }
-
   testInDegree(): void {
     test("test undirected inDegree", () => {
       const graph = this.getGraph();
@@ -253,31 +140,10 @@ class TestUndirectedGraph extends TestGenericGraph<UndirectedGraph<number>> {
       expect(graph.outDegree(6)).toBe(1);
     });
   }
-
-  runUndirectedTests(): void {
-    this.testDAG();
-  }
-
-  testDAG() {
-    describe("test DAG", () => {
-      test("isDAG", () => {
-        const graph = this.getGraph();
-        expect(graph.isDirectedAcyclicGraph()).toBeFalsy();
-      });
-
-      test("topologicalSort", () => {
-        const graph = this.getGraph();
-        expect(() => Array.from(graph.topologicalSort())).toThrow(
-          UnfeasibleError,
-        );
-      });
-    });
-  }
 }
 
 describe("UndirectedGraph", () => {
   const undirectedGraphTest = new TestUndirectedGraph();
 
   undirectedGraphTest.runGenericTests();
-  undirectedGraphTest.runUndirectedTests();
 });

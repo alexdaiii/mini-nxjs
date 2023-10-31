@@ -1,14 +1,10 @@
 import {is} from "immutable";
 
 import {GenericGraph} from "@/GenericGraph";
-import {
-  GraphChangedDuringIterationError,
-  GraphContainsCycleError,
-  UnfeasibleError,
-} from "@/GraphErrors";
 
 /**
  * An unweighted directed graph that does not allow parallel edges
+ * @extends GenericGraph
  */
 export class DiGraph<V = unknown> extends GenericGraph<
   V,
@@ -111,95 +107,5 @@ export class DiGraph<V = unknown> extends GenericGraph<
   outDegree(v: V): number {
     this.validateVertex(v);
     return this._adj.get(v)!.outVtx.size;
-  }
-
-  /**
-   * Determines if the graph is a directed acyclic graph.
-   * @return {boolean} true if the graph is a directed acyclic graph,
-   * false otherwise.
-   */
-  isDirectedAcyclicGraph(): boolean {
-    if (!this.isDirected()) return false;
-
-    try {
-      Array.from(this.topologicalGenerations());
-      return true;
-    } catch (e) {
-      if (e instanceof GraphContainsCycleError) {
-        return false;
-      } else {
-        // istanbul ignore next
-        throw e;
-      }
-    }
-  }
-
-  /**
-   * Returns a topological sort of the graph.
-   * @throws CycleError if the graph is cyclic.
-   */
-  *topologicalSort() {
-    if (!this.isDirected()) {
-      throw new UnfeasibleError(
-        "Topological sort is not defined for undirected graphs",
-      );
-    }
-
-    for (const generation of this.topologicalGenerations()) {
-      yield* generation;
-    }
-  }
-
-  /**
-   * A copy of networkx's topological generations algorithm.
-   */
-  *topologicalGenerations() {
-    if (this.numberOfNodes() === 0) {
-      return;
-    }
-
-    const inDegreeMap = new Map<V, number>();
-    let zeroInDegree: V[] = [];
-
-    for (const [v] of this._adj) {
-      if (this.inDegree(v) > 0) {
-        inDegreeMap.set(v, this.inDegree(v));
-      } else {
-        zeroInDegree.push(v);
-      }
-    }
-
-    while (zeroInDegree.length > 0) {
-      const thisGeneration = zeroInDegree;
-      zeroInDegree = [];
-
-      for (let i = 0; i < thisGeneration.length; ++i) {
-        const node = thisGeneration[i];
-
-        if (!this.hasVertex(node)) {
-          throw new GraphChangedDuringIterationError();
-        }
-
-        const neighbors = this.neighbors(node);
-        for (let j = 0; j < neighbors.length; ++j) {
-          const child = neighbors[j];
-          if (!inDegreeMap.has(child)) {
-            throw new GraphChangedDuringIterationError();
-          }
-          inDegreeMap.set(child, inDegreeMap.get(child)! - 1);
-
-          if (inDegreeMap.get(child)! === 0) {
-            zeroInDegree.push(child);
-            inDegreeMap.delete(child);
-          }
-        }
-      }
-
-      yield thisGeneration;
-    }
-
-    if (inDegreeMap.size > 0) {
-      throw new GraphContainsCycleError();
-    }
   }
 }

@@ -1,6 +1,7 @@
 /**
  * Error thrown when a vertex does not exist in the graph.
  * @template T the type of the vertex id.
+ * @extends Error
  */
 export class VertexDoesNotExistError<T = any> extends Error {
   /**
@@ -15,6 +16,7 @@ export class VertexDoesNotExistError<T = any> extends Error {
 /**
  * Error thrown when an edge does not exist in the graph.
  * @template T the type of the vertex id.
+ * @extends Error
  */
 export class EdgeDoesNotExistError<T = any> extends Error {
   /**
@@ -29,6 +31,7 @@ export class EdgeDoesNotExistError<T = any> extends Error {
 
 /**
  * Error thrown when an edge already exists in the graph.
+ * @extends Error
  */
 export class GraphChangedDuringIterationError extends Error {
   /**
@@ -41,6 +44,7 @@ export class GraphChangedDuringIterationError extends Error {
 
 /**
  * Error thrown when a graph contains a cycle.
+ * @extends Error
  */
 export class GraphContainsCycleError extends Error {
   /**

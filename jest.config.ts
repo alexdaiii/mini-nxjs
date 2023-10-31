@@ -5,6 +5,7 @@ const jestConfig: JestConfigWithTsJest = {
   moduleNameMapper: {
     "^@/(.*)$": "<rootDir>/src/$1",
   },
+  modulePathIgnorePatterns: ["<rootDir>/dist/"],
   preset: "ts-jest",
   testEnvironment: "node",
   extensionsToTreatAsEsm: [".ts"],
@@ -12,7 +13,7 @@ const jestConfig: JestConfigWithTsJest = {
     "^.+\\.tsx?$": [
       "ts-jest",
       {
-        //the content you'd placed at "global"
+        // the content you'd placed at "global"
         useESM: true,
       },
     ],

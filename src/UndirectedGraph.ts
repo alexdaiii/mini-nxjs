@@ -7,6 +7,7 @@ import {Tuple} from "@/utils";
  * An unweighted undirected graph that does not allow parallel edges or self
  * loops.
  * Implemented as a Digraph with edges (v, w) and (w, v) for every edge (v, w).
+ * @extends DiGraph
  */
 export class UndirectedGraph<V = unknown> extends DiGraph<V> {
   /**

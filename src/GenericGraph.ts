@@ -1,12 +1,6 @@
-import {Map, Set, is} from "immutable";
-import Queue from "yocto-queue";
+import {Map} from "immutable";
 
-import {
-  EdgeDoesNotExistError,
-  NoPathExistsError,
-  VertexDoesNotExistError,
-} from "@/GraphErrors";
-import {Tuple} from "@/utils";
+import {EdgeDoesNotExistError, VertexDoesNotExistError} from "@/GraphErrors";
 
 /**
  * A generic graph that does not allow parallel edges, self loops,
@@ -20,9 +14,7 @@ import {Tuple} from "@/utils";
  * Objects should also include a valueOf() method that returns a primitive
  * value.
  *
- * Example:
- *
- * ```[typescript]
+ * @example
  * class Foo {
  *   private readonly a: number;
  *   private readonly b: number;
@@ -46,7 +38,7 @@ import {Tuple} from "@/utils";
  *     return this.a + this.b;
  *   }
  * }
- * ```
+ * const g = new GenericGraph<Foo>();
  *
  * @template V the type of the vertices in the graph.
  */
@@ -66,7 +58,7 @@ export abstract class GenericGraph<V = unknown, E = unknown> {
    * Returns an immutable copy of the adjacency list.
    */
   get adj() {
-    return this._adj.asImmutable();
+    return this._adj;
   }
 
   /**
@@ -132,8 +124,8 @@ export abstract class GenericGraph<V = unknown, E = unknown> {
   abstract removeEdge(_v: V, _w: V): void;
 
   /**
-   * Adds all the edges in the edge list to the graph.
-   * @param {[V, V][]} edgeList the list of edges to add.
+   * Adds all the edges in the edge list to the graph
+   * @param {Array.<Array.<V>>} edgeList the list of edges to add.
    */
   fromEdgeList(edgeList: V[][]) {
     for (let i = 0; i < edgeList.length; i++) {
@@ -200,165 +192,13 @@ export abstract class GenericGraph<V = unknown, E = unknown> {
   abstract outDegree(_v: V): number;
 
   /**
-   * Generator that yields the edges in the graph from a DFS starting at v.
-   * @param {V} v the vertex to start the DFS at.
-   */
-  *dfsEdges(v: V): Generator<[V, V]> {
-    this.validateVertex(v);
-
-    const stack: [V | null, V][] = [[null, v]];
-    // eslint-disable-next-line new-cap
-    const visited = Set<V>().asMutable();
-
-    while (stack.length > 0) {
-      const [parent, child] = stack.pop()!;
-      if (visited.has(child)) continue;
-
-      visited.add(child);
-
-      if (parent !== null) {
-        yield [parent, child];
-      }
-
-      const neighbors = this.neighbors(child);
-      for (let i = 0; i < neighbors.length; i++) {
-        const neighbor = neighbors[i];
-        if (!visited.has(neighbor)) {
-          stack.push([child, neighbor]);
-        }
-      }
-    }
-  }
-
-  /**
-   * Determines if there is a path from v to w.
+   * Validates that the vertex v exists in the graph.
    * @param {V} v
-   * @param {V} w
-   * @return {boolean} true if there is a path from v to w, false otherwise.
+   * @throws VertexDoesNotExistError if the vertex does not exist.
    */
-  hasPath(v: V, w: V): boolean {
-    this.validateVertex(v);
-    this.validateVertex(w);
-
-    for (const [_curr, neigh] of this.dfsEdges(v)) {
-      if (is(neigh, w)) return true;
-    }
-
-    return false;
-  }
-
-  /**
-   * Generator that yields the edges in the graph from a BFS starting at v.
-   * Stops once all vertices have been visited.
-   * @param {V} v the vertex to start the BFS at.
-   */
-  *bfsEdges(v: V): Generator<[V, V]> {
-    this.validateVertex(v);
-
-    const queue = new Queue<V>();
-    // eslint-disable-next-line new-cap
-    const visited = Set<V>().asMutable();
-
-    queue.enqueue(v);
-    visited.add(v);
-
-    while (queue.size > 0) {
-      const node = queue.dequeue()!;
-
-      const neighbors = this.neighbors(node);
-      for (let i = 0; i < neighbors.length; i++) {
-        const neighbor = neighbors[i];
-        if (!visited.has(neighbor)) {
-          yield [node, neighbor];
-          queue.enqueue(neighbor);
-          visited.add(neighbor);
-        }
-      }
-    }
-  }
-
-  /**
-   * Computes the shortest path from v to w. If no such path exists,
-   * raises an error.
-   * @param {V} v the source vertex.
-   * @param {V} w the destination vertex.
-   * @return {V[]} an array of vertices representing the shortest path from
-   * v to w.
-   */
-  shortestPath(v: V, w: V): V[] {
-    this.validateVertex(v);
-    this.validateVertex(w);
-
-    if (is(v, w)) return [];
-
-    // eslint-disable-next-line new-cap
-    const prev = Map<V, V>().asMutable();
-
-    for (const [curr, neigh] of this.bfsEdges(v)) {
-      prev.set(neigh, curr);
-      if (neigh === w) break;
-    }
-
-    if (!prev.has(w)) {
-      throw new NoPathExistsError();
-    }
-
-    const path = [w];
-    let curr = w;
-    while (!is(curr, v)) {
-      curr = prev.get(curr)!;
-      path.push(curr);
-    }
-
-    return path.reverse();
-  }
-
-  /**
-   * Similar to bfs_edges, in that it returns edges in BFS order from a source.
-   * However, it differs in that it stops
-   * once all the edges in the connected component containing v have been
-   * visited.
-   * @param {V} v the vertex to start the BFS at.
-   */
-  *edgeBfs(v: V): Generator<[V, V]> {
-    this.validateVertex(v);
-
-    const getEdge = (u: V, v: V) => {
-      if (this.isDirected()) {
-        // eslint-disable-next-line new-cap
-        return Tuple(u, v);
-      }
-
-      // if undirected, return the edge in sorted order so that
-      // (u, v) and (v, u) are the same edge
-      if (u < v) {
-        // eslint-disable-next-line new-cap
-        return Tuple(u, v);
-      }
-      // eslint-disable-next-line new-cap
-      return Tuple(v, u);
-    };
-
-    const queue = new Queue<V>();
-    // eslint-disable-next-line new-cap
-    const visitedEdges = Set<Tuple<V>>().asMutable();
-
-    queue.enqueue(v);
-
-    while (queue.size > 0) {
-      const node = queue.dequeue()!;
-
-      const neighbors = this.neighbors(node);
-      for (let i = 0; i < neighbors.length; i++) {
-        const neighbor = neighbors[i];
-
-        const edge = getEdge(node, neighbor);
-        if (!visitedEdges.has(edge)) {
-          yield [node, neighbor];
-          queue.enqueue(neighbor);
-          visitedEdges.add(edge);
-        }
-      }
+  validateVertex(v: V) {
+    if (!this.hasVertex(v)) {
+      throw new VertexDoesNotExistError(v);
     }
   }
 
@@ -366,22 +206,11 @@ export abstract class GenericGraph<V = unknown, E = unknown> {
    * Validates that the edge (v, w) exists in the graph.
    * @param {V} v
    * @param {V} w
-   * @protected
+   * @throws EdgeDoesNotExistError if the edge does not exist.
    */
-  protected validateEdge(v: V, w: V) {
+  validateEdge(v: V, w: V) {
     if (!this.hasEdge(v, w)) {
       throw new EdgeDoesNotExistError(v, w);
-    }
-  }
-
-  /**
-   * Validates that the vertex v exists in the graph.
-   * @param {V} v
-   * @protected
-   */
-  protected validateVertex(v: V) {
-    if (!this.hasVertex(v)) {
-      throw new VertexDoesNotExistError(v);
     }
   }
 }
