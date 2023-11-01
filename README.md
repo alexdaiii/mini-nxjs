@@ -1,6 +1,7 @@
 # @alexdaiii/mini-nxjs
 
 [![npm version](https://badge.fury.io/js/@alexdaiii%2Fmini-nxjs.svg)](https://badge.fury.io/js/@alexdaiii%2Fmini-nxjs)
+[![codecov](https://codecov.io/gh/alexdaiii/mini-nxjs/graph/badge.svg?token=FP5SCSGRZH)](https://codecov.io/gh/alexdaiii/mini-nxjs)
 
 @alexdaiii/mini-nxjs-cls is a simple graph theory library for JavaScript. It implements basic graph theory algorithms
 on unweighted graphs. Graph algorithms are implemented in an
