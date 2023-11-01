@@ -18,6 +18,8 @@ const jestConfig: JestConfigWithTsJest = {
       },
     ],
   },
+  collectCoverage: true,
+  coverageReporters: ["text", "cobertura"],
 };
 
 export default jestConfig;
