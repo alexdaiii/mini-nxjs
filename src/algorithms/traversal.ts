@@ -93,22 +93,6 @@ export function* edgeBfs<V, E>(
 ): Generator<[V, V]> {
   graph.validateVertex(v);
 
-  const getEdge = (u: V, v: V) => {
-    if (graph.isDirected()) {
-      // eslint-disable-next-line new-cap
-      return Tuple(u, v);
-    }
-
-    // if undirected, return the edge in sorted order so that
-    // (u, v) and (v, u) are the same edge
-    if (u < v) {
-      // eslint-disable-next-line new-cap
-      return Tuple(u, v);
-    }
-    // eslint-disable-next-line new-cap
-    return Tuple(v, u);
-  };
-
   const queue = new Queue<V>();
   // eslint-disable-next-line new-cap
   const visitedEdges = Set<Tuple<V>>().asMutable();
@@ -122,7 +106,7 @@ export function* edgeBfs<V, E>(
     for (let i = 0; i < neighbors.length; i++) {
       const neighbor = neighbors[i];
 
-      const edge = getEdge(node, neighbor);
+      const edge = getEdge(graph, node, neighbor);
       if (!visitedEdges.has(edge)) {
         yield [node, neighbor];
         queue.enqueue(neighbor);
@@ -131,3 +115,19 @@ export function* edgeBfs<V, E>(
     }
   }
 }
+
+const getEdge = <V, E>(graph: GenericGraph<V, E>, u: V, v: V) => {
+  if (graph.isDirected()) {
+    // eslint-disable-next-line new-cap
+    return Tuple(u, v);
+  }
+
+  // if undirected, return the edge in sorted order so that
+  // (u, v) and (v, u) are the same edge
+  if (u < v) {
+    // eslint-disable-next-line new-cap
+    return Tuple(u, v);
+  }
+  // eslint-disable-next-line new-cap
+  return Tuple(v, u);
+};

@@ -3,16 +3,27 @@ import {is} from "immutable";
 import {GenericGraph} from "@/GenericGraph";
 
 /**
+ * Edge information for a vertex.
+ * @template V the type of the vertex id.
+ */
+class EdgeInfo<V> {
+  inVtx: Set<V>;
+  outVtx: Set<V>;
+
+  /**
+   * Constructs a new EdgeInfo.
+   */
+  constructor() {
+    this.inVtx = new Set();
+    this.outVtx = new Set();
+  }
+}
+
+/**
  * An unweighted directed graph that does not allow parallel edges
  * @extends GenericGraph
  */
-export class DiGraph<V = unknown> extends GenericGraph<
-  V,
-  {
-    inVtx: Set<V>;
-    outVtx: Set<V>;
-  }
-> {
+export class DiGraph<V = unknown> extends GenericGraph<V, EdgeInfo<V>> {
   /**
    * Constructs a new empty DiGraph.
    */
@@ -45,7 +56,7 @@ export class DiGraph<V = unknown> extends GenericGraph<
    */
   addVertex(v: V): void {
     if (!this._adj.has(v)) {
-      this._adj.set(v, {inVtx: new Set(), outVtx: new Set()});
+      this._adj.set(v, new EdgeInfo());
     }
   }
 
@@ -54,10 +65,10 @@ export class DiGraph<V = unknown> extends GenericGraph<
    */
   addEdge(v: V, w: V): void {
     if (!this._adj.has(v)) {
-      this._adj.set(v, {inVtx: new Set(), outVtx: new Set()});
+      this._adj.set(v, new EdgeInfo());
     }
     if (!this._adj.has(w)) {
-      this._adj.set(w, {inVtx: new Set(), outVtx: new Set()});
+      this._adj.set(w, new EdgeInfo());
     }
 
     if (is(w, v)) return;
