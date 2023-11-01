@@ -27,6 +27,6 @@ graph.addEdge(2, 3);
 const path = algorithms.shortestPath(graph, 1, 3);
 ```
 
-### Documentation
+### API Documentation
 
-[Docs](/docs/index.html)
+[Docs](https://mini-nxjs.port5000.com)

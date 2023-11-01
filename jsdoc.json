@@ -2,7 +2,7 @@
   "source": {
     "includePattern": ".+\\.js(doc|x)?$",
     "excludePattern": ".+(\\.test\\.js)(doc|x)?$",
-    "include": ["./dist"],
+    "include": ["./build"],
     "exclude": ["node_modules", "**/tests/*", "*.test.js"]
   },
   "recurseDepth": 10,

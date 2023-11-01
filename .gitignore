@@ -1,6 +1,7 @@
 ### Node template
 lib
 dist
+build
 
 # Logs
 logs

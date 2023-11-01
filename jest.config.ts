@@ -5,7 +5,7 @@ const jestConfig: JestConfigWithTsJest = {
   moduleNameMapper: {
     "^@/(.*)$": "<rootDir>/src/$1",
   },
-  modulePathIgnorePatterns: ["<rootDir>/dist/"],
+  modulePathIgnorePatterns: ["<rootDir>/build/"],
   preset: "ts-jest",
   testEnvironment: "node",
   extensionsToTreatAsEsm: [".ts"],
