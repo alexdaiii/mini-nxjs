@@ -36,7 +36,7 @@
   },
   "homepage": "https://github.com/alexdaiii/mini-nxjs#readme",
   "dependencies": {
-    "immutable": "^4.3.4",
+    "immutable": "^4.3.5",
     "yocto-queue": "^1.0.0"
   },
   "devDependencies": {
