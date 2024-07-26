@@ -37,7 +37,7 @@
   "homepage": "https://github.com/alexdaiii/mini-nxjs#readme",
   "dependencies": {
     "immutable": "^4.3.6",
-    "yocto-queue": "^1.0.0"
+    "yocto-queue": "^1.1.1"
   },
   "devDependencies": {
     "@jest/globals": "^29.7.0",
